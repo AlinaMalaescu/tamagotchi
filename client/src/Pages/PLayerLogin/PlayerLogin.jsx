@@ -42,9 +42,23 @@ const PlayerLogin = () => {
       }
   }
 
+  const handleLogin = async (player) => {
+
+    const registeredPlayer = await searchPlayerByName(player);
+  
+    if (registeredPlayer) {
+
+      player.password === registeredPlayer.password ? 
+             navigate(`/game?playerName=${registeredPlayer.name}`) : 
+             window.alert('Incorrect password');
+    } else {
+      window.alert('There is no player with this name.');
+    }
+}
+
   return (
     <div className={styles.loginContainer}>
-      <LoginForm handleSignUp = {handleSignUp}/>
+      <LoginForm handleSignUp = {handleSignUp} handleLogin={handleLogin}/>
     </div>
   )
 }

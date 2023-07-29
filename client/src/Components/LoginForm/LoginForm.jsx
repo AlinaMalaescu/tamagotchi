@@ -1,17 +1,20 @@
+import styles from './LoginForm.css';
 import { useForm } from 'react-hook-form';
 
 
-export default function LoginForm({handleSignUp}) {
+export default function LoginForm({handleSignUp, handleLogin}) {
 
 
   const {
     handleSubmit: handleSubmit1,
-    register: register1
+    register: register1,
+    formState: { errors: errors1 }
   } = useForm();
 
   const {
     handleSubmit: handleSubmit2,
-    register: register2
+    register: register2,
+    formState: { errors: errors2 }
   } = useForm();
 
     return (
@@ -19,7 +22,7 @@ export default function LoginForm({handleSignUp}) {
       <div className="containerLogin">
       <input id="register_toggle" type="checkbox"/>
       <div className="slider">
-        <form className="form" onSubmit={handleSubmit1(data => handleSignUp(data))} >
+        <form className="form" onSubmit={handleSubmit1(data => handleLogin(data))} >
           <span className="title">Login</span>
           <div className="form_control">
             <input required="" { ...register1('name')} className="input" type="text" id="loginName"/>
