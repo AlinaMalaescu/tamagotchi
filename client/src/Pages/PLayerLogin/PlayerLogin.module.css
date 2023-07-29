@@ -1,0 +1,10 @@
+.loginContainer {
+    display: flex;
+    justify-content: center; /* Horizontally center the flex items */
+    align-items: center; /* Vertically center the flex items */
+    background-image: url('./backLogin.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh; /* Set the body height to 100% of the viewport height */
+    margin: 0; /* Remove default body margin */
+}

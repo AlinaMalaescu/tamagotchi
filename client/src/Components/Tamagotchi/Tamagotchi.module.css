@@ -1,0 +1,22 @@
+.tamagotchiContainer {
+    display: flex;
+    position: relative;
+    background-color: bisque; 
+    background-image: url(./tamagotchibaby.png); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+}
+
+.buttonsContainer {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    
+    height: 300px;
+    width: 160px;
+
+    top: 800 px; 
+    left: 200px;
+}
