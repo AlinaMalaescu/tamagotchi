@@ -39,24 +39,47 @@ const getPlayer =  async (player) => {
       }
   }
 
+  const calculateLifeCycle = (player) => {
+    const currentTime =  Date.now();
+   //hours since creation
+    const unitsOfLife = Math.floor((currentTime - new Date(player.tamagotchi.created))/3600000);
+    console.log("these are the units: " + unitsOfLife);
+  //every stage has 4 hours, representing a life cycle
+    const lifeStage = Math.ceil(unitsOfLife/4);
+   console.log("this is the lifestage " +lifeStage)
+
+    switch (lifeStage) {
+      case 0 : return 'baby';
+      case 1 : return 'baby';
+      case 2 : return 'teenager';
+      case 3 : return 'adult';
+      case 4 : return 'senior';
+      case 5 : return 'dead';
+      default: return 'unknown';
+    }
+
+  }
+
 
 
 const GamePage = () => {
 
   const [player, setPlayer] = useState(null);
   const [dead, setDeath] = useState(false);
+  const [lifeCycle, setLifeCycle] = useState(null);
 
   const { name } = useParams();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const playerName = params.get('playerName');
-  
+
   console.log("aici s-a gasit numele din query: " + playerName);
  
     useEffect(() => {     
           getPlayer({ name: `${playerName}` })
           .then((data) => {
             setPlayer(data);
+            setLifeCycle(calculateLifeCycle(data));
           })
       }, []);
 
