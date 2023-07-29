@@ -49,8 +49,8 @@ const GameOver = ({player}) => {
     }
 
   return (
-    <div>
-        <h1>Your pet died</h1>
+    <div className='containerGameOver'>
+        <h1>Your pet died. RIP </h1>
         <button onClick= {handleNewPet}>GET NEW PET</button>
         <button onClick= {handleQuit}>QUIT</button>      
     </div>

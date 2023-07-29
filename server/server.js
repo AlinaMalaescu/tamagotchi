@@ -85,7 +85,7 @@ app.post('/api/player/create', async (req, res, next) => {
 
 app.patch("/api/player/:name", async (req, res, next) => {
 
-  console.log(req.body);
+  req.body.tamagotchi.updated = Date.now();
 
   try {
     const player = await PlayerModel.findOneAndUpdate(

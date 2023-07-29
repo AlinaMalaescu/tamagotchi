@@ -1,8 +1,41 @@
-.tamagotchiContainer {
+.tamagotchiContainerBaby {
     display: flex;
     position: relative;
     background-color: bisque; 
-    background-image: url(./tamagotchibaby.png); 
+    background-image: url(./tamagotchiBaby.png); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+}
+
+.tamagotchiContainerTeen {
+    display: flex;
+    position: relative;
+    background-color: bisque; 
+    background-image: url(./tamagotchiTeen.png); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+}
+
+.tamagotchiContainerAdult {
+    display: flex;
+    position: relative;
+    background-color: bisque; 
+    background-image: url(./tamagotchiAdult.png); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+}
+
+.tamagotchiContainerSenior {
+    display: flex;
+    position: relative;
+    background-color: bisque; 
+    background-image: url(./tamagotchiOld.png); 
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;

@@ -60,6 +60,35 @@ const getPlayer =  async (player) => {
 
   }
 
+  const calculateGameAbsence = (player) => {
+    const currentTime =  Date.now();
+
+    const roundsOfUp = Math.floor((currentTime - new Date(player.tamagotchi.created))/120000);
+
+    console.log("roundsOfUpdates" + roundsOfUp);
+
+    const roundsOfUpdates = Math.floor((currentTime - new Date(player.tamagotchi.updated))/120000);
+
+    console.log("roundsOfUpdates" + roundsOfUpdates);
+
+    const lostPoints = roundsOfUpdates * 10;
+
+    console.log("lostPoints" + lostPoints);
+
+    const updatedPlayer = {
+      ...player,
+      tamagotchi: {
+        ...player.tamagotchi,
+        health: player.tamagotchi.health - lostPoints >= 0? player.tamagotchi.health - lostPoints : 0,
+        happiness: player.tamagotchi.happiness - lostPoints >=0? player.tamagotchi.happiness - lostPoints : 0,
+        cleanliness: player.tamagotchi.cleanliness - lostPoints >=0? player.tamagotchi.cleanliness - lostPoints : 0},
+      }
+
+      console.log(updatedPlayer);
+
+     return updatedPlayer;
+  }
+
 
 
 const GamePage = () => {
@@ -78,23 +107,36 @@ const GamePage = () => {
     useEffect(() => {     
           getPlayer({ name: `${playerName}` })
           .then((data) => {
-            setPlayer(data);
-            setLifeCycle(calculateLifeCycle(data));
+            const evaluatedPlayer = calculateGameAbsence(data);
+          
+            if (evaluatedPlayer.tamagotchi.health === 0 ||
+                evaluatedPlayer.tamagotchi.happiness === 0 ||
+                evaluatedPlayer.tamagotchi.cleanliness === 0) {
+                setPlayer(evaluatedPlayer);
+                setDeath(true);
+              } else {
+                setPlayer(evaluatedPlayer);
+                setLifeCycle(calculateLifeCycle(evaluatedPlayer));
+              }          
           })
+  
       }, []);
 
 
   useEffect(() => {
+
     if (player) {
       const intervalId = setInterval(() => {
      
+        console.log('EVRIKA!');
+
         if (
-          player.tamagotchi.health > 0 &&
-          player.tamagotchi.happiness > 0 &&
-          player.tamagotchi.cleanliness > 0
+          player.tamagotchi.health > 10 &&
+          player.tamagotchi.happiness > 10 &&
+          player.tamagotchi.cleanliness > 10
         ) {
           
-          const currentTime = Date.now();
+        //  let currentTime = Date.now();
           const updatedPlayer = {
             ...player,
             tamagotchi: {
@@ -102,7 +144,7 @@ const GamePage = () => {
               health: player.tamagotchi.health - 10,
               happiness: player.tamagotchi.happiness - 10,
               cleanliness: player.tamagotchi.cleanliness - 10},
-              updated: currentTime}
+             }
 
           setPlayer(updatedPlayer);
           updatePlayer(updatedPlayer);
@@ -111,14 +153,14 @@ const GamePage = () => {
           setDeath(true);
           clearInterval(intervalId); 
         }
-      }, 100000);
+      }, 120000);
       return () => clearInterval(intervalId);
     }
   }, [player]);
 
   return (
     <>
-    {player && !dead && <Tamagotchi player={player} setPlayer={setPlayer} />}
+    {player && !dead && <Tamagotchi player={player} setPlayer={setPlayer} lifeCycle={lifeCycle}/>}
     {dead && <GameOver player={player} setPlayer={setPlayer}/>}
     </>
   )
