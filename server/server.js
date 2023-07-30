@@ -62,7 +62,7 @@ app.post("/api/anonimus", async (req, res, next) => {
 });
 
 app.post('/api/player/create', async (req, res, next) => {
-  
+
   try {
       const newPlayer = {
         name: req.body.name,
@@ -100,11 +100,12 @@ app.patch("/api/player/:name", async (req, res, next) => {
   }
 });
 
-app.delete("/api/anonimus", async (req, res, next) => {
+app.delete("/api/player/:name", async (req, res, next) => {
   console.log("s-a gasit de sters");
   try {
+    
     console.log("se incearca")
-    const player = await PlayerModel.findOne({ name: "anonimus" });
+    const player = await PlayerModel.findOne({name: req.params.name});
     console.log(player);
     const deleted = await player.deleteOne();
     return res.json(deleted);

@@ -1,15 +1,17 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
+import styles from './GameOver.module.css'
 
 const GameOver = ({player}) => {
 
     const navigate =  useNavigate();
     const { name } = useParams();
 
-    const deleteAnonimusPlayer = () => {
+    const deletePlayer = () => {
         console.log(player)
-        return fetch("http://localhost:8080/api/anonimus", {
+       
+        return fetch(`http://localhost:8080/api/player/${player.name}`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
@@ -44,15 +46,17 @@ const GameOver = ({player}) => {
     };
 
     const handleQuit = () => {
-        deleteAnonimusPlayer();
+        deletePlayer();
         navigate("/");
     }
 
   return (
-    <div className='containerGameOver'>
+    <div className = {styles.containerGameOver}>
         <h1>Your pet died. RIP </h1>
+        <div>
         <button onClick= {handleNewPet}>GET NEW PET</button>
-        <button onClick= {handleQuit}>QUIT</button>      
+        <button onClick= {handleQuit}>QUIT</button>  
+        </div>   
     </div>
   )
 }

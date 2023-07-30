@@ -5,24 +5,17 @@ import './MainPage.css'
 
 const MainPage = () => {
 
-  const handlePlay = () => {
-    console.log('play')
-  }
-
-  const handleLogin = () => {
-    console.log('login')
-  }
 
   return (
     <div className='containerMain'>
       <div className='containerContent'>
-        <h1>TAMAGOTCHI</h1>
+
         <Link to="/game?playerName=anonimus">
-              <button className='buttons' type="button" onClick = {handlePlay}>PLAY</button>
+              <button className='buttons' type="button">PLAY</button>
         </Link>
 
         <Link to="/login">
-              <button className='buttons' type="button" onClick = {handleLogin}>LOGIN</button>
+              <button className='buttons' type="button">LOGIN</button>
         </Link>
     </div>
 </div>

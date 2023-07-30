@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center; /* Horizontally center the flex items */
     align-items: center; /* Vertically center the flex items */
-    background-image: url('./walpy.png');
+    background-image: url('./miau.png');
     background-color: rgb(70, 150, 197);
     background-repeat: no-repeat;
     background-size: cover;
@@ -16,8 +16,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0;
-    background-color: rgb(55, 144, 144);
+
+ 
     width: 30%; 
     height: 250px; 
   }

@@ -15,9 +15,9 @@ const handleAnonimusPlayer = (player) => {
       },
       body: JSON.stringify({player}),
     }).then((res) => res.json());
-  };
+};
 
-  const updatePlayer = (updatedPlayer) => {
+const updatePlayer = (updatedPlayer) => {
   
     return fetch(`http://localhost:8080/api/player/${updatedPlayer.name}`, {
       method: "PATCH",
@@ -32,12 +32,12 @@ const getPlayer =  async (player) => {
   console.log(player);
 
     if (player.name === 'anonimus') {
-      console.log('yes');
+
       return handleAnonimusPlayer(player);
     } else {
         return fetch(`http://localhost:8080/api/player/${player.name}`).then((res) => res.json());
       }
-  }
+}
 
   const calculateLifeCycle = (player) => {
     const currentTime =  Date.now();
@@ -45,7 +45,7 @@ const getPlayer =  async (player) => {
     const unitsOfLife = Math.floor((currentTime - new Date(player.tamagotchi.created))/3600000);
     console.log("these are the units: " + unitsOfLife);
   //every stage has 4 hours, representing a life cycle
-    const lifeStage = Math.ceil(unitsOfLife/4);
+    const lifeStage = Math.ceil(unitsOfLife/1);
    console.log("this is the lifestage " +lifeStage)
 
     switch (lifeStage) {
@@ -61,21 +61,19 @@ const getPlayer =  async (player) => {
   }
 
   const calculateGameAbsence = (player) => {
+
     const currentTime =  Date.now();
-
-    const roundsOfUp = Math.floor((currentTime - new Date(player.tamagotchi.created))/120000);
-
-    console.log("roundsOfUpdates" + roundsOfUp);
-
     const roundsOfUpdates = Math.floor((currentTime - new Date(player.tamagotchi.updated))/120000);
 
-    console.log("roundsOfUpdates" + roundsOfUpdates);
+    return roundsOfUpdates * 10;;
+  }
 
-    const lostPoints = roundsOfUpdates * 10;
 
-    console.log("lostPoints" + lostPoints);
+const updatePLayerAbsence = (player) => {
 
-    const updatedPlayer = {
+  const lostPoints = calculateGameAbsence(player);
+
+   const updatedPlayer = {
       ...player,
       tamagotchi: {
         ...player.tamagotchi,
@@ -84,10 +82,8 @@ const getPlayer =  async (player) => {
         cleanliness: player.tamagotchi.cleanliness - lostPoints >=0? player.tamagotchi.cleanliness - lostPoints : 0},
       }
 
-      console.log(updatedPlayer);
-
      return updatedPlayer;
-  }
+}
 
 
 
@@ -101,22 +97,22 @@ const GamePage = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const playerName = params.get('playerName');
-
-  console.log("aici s-a gasit numele din query: " + playerName);
  
     useEffect(() => {     
           getPlayer({ name: `${playerName}` })
           .then((data) => {
-            const evaluatedPlayer = calculateGameAbsence(data);
-          
+            const evaluatedPlayer = updatePLayerAbsence(data);
+            const lifeCycle = calculateLifeCycle(evaluatedPlayer);
+
             if (evaluatedPlayer.tamagotchi.health === 0 ||
                 evaluatedPlayer.tamagotchi.happiness === 0 ||
-                evaluatedPlayer.tamagotchi.cleanliness === 0) {
+                evaluatedPlayer.tamagotchi.cleanliness === 0 ||
+                lifeCycle === 'dead' || lifeCycle === 'unknown') {
                 setPlayer(evaluatedPlayer);
                 setDeath(true);
-              } else {
-                setPlayer(evaluatedPlayer);
-                setLifeCycle(calculateLifeCycle(evaluatedPlayer));
+              } else { 
+                   setPlayer(evaluatedPlayer);
+                   setLifeCycle(calculateLifeCycle(evaluatedPlayer));
               }          
           })
   
@@ -127,16 +123,13 @@ const GamePage = () => {
 
     if (player) {
       const intervalId = setInterval(() => {
-     
-        console.log('EVRIKA!');
 
         if (
           player.tamagotchi.health > 10 &&
           player.tamagotchi.happiness > 10 &&
           player.tamagotchi.cleanliness > 10
-        ) {
-          
-        //  let currentTime = Date.now();
+        ) {         
+       
           const updatedPlayer = {
             ...player,
             tamagotchi: {

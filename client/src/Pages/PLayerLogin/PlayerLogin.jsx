@@ -19,7 +19,7 @@ const createPlayer = (player) => {
         },
         body: JSON.stringify(player),
       })
-      .then((res) => { res.json();})
+      .then((res) => { res.json() })
       .catch((error) => { 
         console.error("Error while making the fetch request:", error);
       });
@@ -31,13 +31,13 @@ const PlayerLogin = () => {
   const navigate =  useNavigate();
 
   const handleSignUp = async (player) => {
-
+  
       const playerExists = await searchPlayerByName(player);
     
       if (playerExists) {
         window.alert('This username is not available!')
-      } else {
-        createPlayer(player);
+      } else {  
+        const newPlayer =  await createPlayer(player);
         navigate(`/game?playerName=${player.name}`)
       }
   }
