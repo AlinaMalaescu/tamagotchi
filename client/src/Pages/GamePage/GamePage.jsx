@@ -3,71 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import Tamagotchi from '../../Components/Tamagotchi/Tamagotchi'
 import GameOver from '../../Components/GameOver/GameOver'
-
-
-const updatePlayer = async (updatedPlayer) => {
-  
-    return fetch(`http://localhost:8080/api/player/${updatedPlayer.name}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedPlayer),
-    }).then((res) => res.json());
-}
-
-const getPlayer =  async (player) => {
-  return fetch(`http://localhost:8080/api/player/${player.name}`).then((res) => res.json());
-}
-
-  const calculateLifeCycle = (player) => {
-    const currentTime =  Date.now();
-   //hours since creation
-    const unitsOfLife = Math.floor((currentTime - new Date(player.tamagotchi.created))/3600000);
-    console.log("these are the units: " + unitsOfLife);
-  //every stage has 4 hours, representing a life cycle
-    const lifeStage = Math.ceil(unitsOfLife/1);
-   console.log("this is the lifestage " +lifeStage)
-
-    switch (lifeStage) {
-      case 0 : return 'baby';
-      case 1 : return 'baby';
-      case 2 : return 'teenager';
-      case 3 : return 'adult';
-      case 4 : return 'senior';
-      case 5 : return 'dead';
-      default: return 'unknown';
-    }
-
-  }
-
-  const calculateGameAbsence = (player) => {
-
-    const currentTime =  Date.now();
-    const roundsOfUpdates = Math.floor((currentTime - new Date(player.tamagotchi.updated))/120000);
-    console.log("rounds of updates " + roundsOfUpdates);
-    console.log("points to be deducted " + roundsOfUpdates*10);
-
-    return roundsOfUpdates * 10;;
-  }
-
-
-const updatePLayerAbsence = (player) => {
-
-  const lostPoints = calculateGameAbsence(player);
-
-   const updatedPlayer = {
-      ...player,
-      tamagotchi: {
-        ...player.tamagotchi,
-        health: player.tamagotchi.health - lostPoints >= 0? player.tamagotchi.health - lostPoints : 0,
-        happiness: player.tamagotchi.happiness - lostPoints >=0? player.tamagotchi.happiness - lostPoints : 0,
-        cleanliness: player.tamagotchi.cleanliness - lostPoints >=0? player.tamagotchi.cleanliness - lostPoints : 0},
-      }
-
-     return updatedPlayer;
-}
-
+import Utils from '../../utils/Utils'
 
 
 const GamePage = () => {
@@ -82,11 +18,11 @@ const GamePage = () => {
   const playerName = params.get('playerName');
  
     useEffect(() => {     
-          getPlayer({ name: `${playerName}` })
+          Utils.getPlayer({ name: `${playerName}` })
           .then((data) => {
 
-            const evaluatedPlayer = updatePLayerAbsence(data);
-            const lifeCycle = calculateLifeCycle(evaluatedPlayer);
+            const evaluatedPlayer = Utils.updatePLayerAbsence(data, Utils.calculateGameAbsence);
+            const lifeCycle = Utils.calculateLifeCycle(evaluatedPlayer);
 
             if (evaluatedPlayer.tamagotchi.health === 0 ||
                 evaluatedPlayer.tamagotchi.happiness === 0 ||
@@ -99,7 +35,7 @@ const GamePage = () => {
               } else { 
 
                    setPlayer(evaluatedPlayer);
-                   setLifeCycle(calculateLifeCycle(evaluatedPlayer));
+                   setLifeCycle(Utils.calculateLifeCycle(evaluatedPlayer));
               }          
           })
   
@@ -110,7 +46,7 @@ const GamePage = () => {
 
     if (player) {
 
-      updatePlayer(player);
+      Utils.updatePlayer(player);
 
       const intervalId = setInterval(() => {
 

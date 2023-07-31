@@ -3,27 +3,7 @@ import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../../Components/LoginForm/LoginForm';
 import styles from './PlayerLogin.module.css';
-
-
-
-const searchPlayerByName = async (player) => {
-  return fetch(`http://localhost:8080/api/player/${player.name}`).then((res) => res.json());
-}
-
-const createPlayer = async (player) => {
-
-      return fetch("http://localhost:8080/api/player/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(player),
-      })
-      .then((res) => { res.json() })
-      .catch((error) => { 
-        console.error("Error while making the fetch request:", error);
-      });
-  };
+import Utils from '../../utils/Utils'
 
 
 const PlayerLogin = () => {
@@ -32,19 +12,19 @@ const PlayerLogin = () => {
 
   const handleSignUp = async (player) => {
   
-      const playerExists = await searchPlayerByName(player);
+      const playerExists = await Utils.getPlayer(player);
     
       if (playerExists) {
         window.alert('This username is not available!')
       } else {  
-        const newPlayer =  await createPlayer(player);
+        const newPlayer =  await Utils.createPlayer(player);
         navigate(`/game?playerName=${player.name}`)
       }
   }
 
   const handleLogin = async (player) => {
 
-    const registeredPlayer = await searchPlayerByName(player);
+    const registeredPlayer = await Utils.getPlayer(player);
   
     if (registeredPlayer) {
 
