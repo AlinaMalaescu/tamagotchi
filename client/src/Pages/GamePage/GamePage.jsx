@@ -8,6 +8,17 @@ import Utils from '../../utils/Utils'
 
 const GamePage = () => {
 
+  const updatePlayer = async (updatedPlayer) => {
+    
+    return fetch(`http://localhost:8080/api/player/${updatedPlayer.name}`, {
+    method: "PATCH",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedPlayer),
+    }).then((res) => res.json());
+}
+
   const [player, setPlayer] = useState(null);
   const [dead, setDeath] = useState(false);
   const [lifeCycle, setLifeCycle] = useState(null);
@@ -47,8 +58,14 @@ const GamePage = () => {
     if (player) {
 
       Utils.updatePlayer(player);
+      setLifeCycle(Utils.calculateLifeCycle(player));
 
-      const intervalId = setInterval(() => {
+      }
+
+      // Utils.updatePlayer(player);
+      // setLifeCycle(Utils.calculateLifeCycle(player));
+
+      const interval = setInterval(() => {
 
         if (
           player.tamagotchi.health > 10 &&
@@ -66,15 +83,16 @@ const GamePage = () => {
              }
 
           setPlayer(updatedPlayer);
+          setLifeCycle(Utils.calculateLifeCycle(player));
 
         } else {
           setDeath(true);
-          clearInterval(intervalId); 
+          clearInterval(interval); 
         }
 
-      }, 120000);
-      return () => clearInterval(intervalId);
-    }
+      }, 3_600_000);
+      return () => clearInterval(interval);
+
   }, [player]);
 
   return (

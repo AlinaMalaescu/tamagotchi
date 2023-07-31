@@ -36,8 +36,6 @@ app.get("/api/player/:name", async (req, res) => {
 });
 
 app.post('/api/player/create', async (req, res, next) => {
-  console.log('nume player ' + req.body.name);
-  console.log('parola player ' + req.body.password);
 
   try {
       const newPlayer = {
@@ -52,7 +50,7 @@ app.post('/api/player/create', async (req, res, next) => {
         },
       };
       const newlyCreatedPlayer = await PlayerModel.create(newPlayer);
-      console.log(newlyCreatedPlayer);
+      // console.log(newlyCreatedPlayer);
       return res.json(newlyCreatedPlayer);
  
     } catch (err) {
@@ -78,14 +76,13 @@ app.patch("/api/player/:name", async (req, res, next) => {
 });
 
 app.delete("/api/player/:name", async (req, res, next) => {
-  console.log("s-a gasit de sters");
+
   try {
     
-    console.log("se incearca")
     const player = await PlayerModel.findOne({name: req.params.name});
-    console.log(player);
-    const deleted = await player.deleteOne();
+    const deleted = await player.deleteOne();  
     return res.json(deleted);
+    
   } catch (err) {
     return next(err);
   }

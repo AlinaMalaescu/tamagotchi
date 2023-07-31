@@ -1,5 +1,4 @@
 import React from 'react'
-
 import styles from './Tamagotchi.module.css'
 
 const Tamagotchi = ({player, setPlayer, lifeCycle}) => {

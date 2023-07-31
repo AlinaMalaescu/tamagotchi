@@ -35,10 +35,10 @@ class Utils {
   static calculateLifeCycle = (player) => {
     const currentTime =  Date.now();
    //hours since creation
-    const unitsOfLife = Math.floor((currentTime - new Date(player.tamagotchi.created))/3600000);
+    const unitsOfLife = Math.floor((currentTime - new Date(player.tamagotchi.created))/3_600_000);
     console.log("these are the units: " + unitsOfLife);
-  //every stage has 4 hours, representing a life cycle
-    const lifeStage = Math.ceil(unitsOfLife/1);
+  //every stage has 24 hours, representing a life cycle
+    const lifeStage = Math.ceil(unitsOfLife/24);
    console.log("this is the lifestage " +lifeStage)
 
     switch (lifeStage) {
@@ -55,9 +55,9 @@ class Utils {
   static calculateGameAbsence = (player) => {
 
     const currentTime =  Date.now();
-    const roundsOfUpdates = Math.floor((currentTime - new Date(player.tamagotchi.updated))/120000);
-    console.log("rounds of updates " + roundsOfUpdates);
-    console.log("points to be deducted " + roundsOfUpdates*10);
+    const roundsOfUpdates = Math.floor((currentTime - new Date(player.tamagotchi.updated))/3_600_000);
+    // console.log("rounds of updates " + roundsOfUpdates);
+    // console.log("points to be deducted " + roundsOfUpdates*10);
 
     return roundsOfUpdates * 10;;
   }
