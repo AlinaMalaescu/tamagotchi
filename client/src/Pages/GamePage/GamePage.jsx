@@ -62,8 +62,7 @@ const GamePage = () => {
 
       }
 
-      // Utils.updatePlayer(player);
-      // setLifeCycle(Utils.calculateLifeCycle(player));
+
 
       const interval = setInterval(() => {
 
