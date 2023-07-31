@@ -8,7 +8,7 @@ const GameOver = ({player}) => {
     const navigate =  useNavigate();
     const { name } = useParams();
 
-    const deletePlayer = () => {
+    const deletePlayer = async () => {
         console.log(player)
        
         return fetch(`http://localhost:8080/api/player/${player.name}`, {
@@ -20,7 +20,7 @@ const GameOver = ({player}) => {
           }).then((res) => res.json());
     }
 
-    const updateAnonimusPlayer = () => {
+    const updateAnonimusPlayer = async () => {
         const updatedPlayer =
         {...player, tamagotchi : {
                                 health: 100,
@@ -53,7 +53,7 @@ const GameOver = ({player}) => {
   return (
     <div className = {styles.containerGameOver}>
         <h1>Your pet died. RIP </h1>
-        <div>
+        <div className = {styles.containerGameOverButtons}>
         <button onClick= {handleNewPet}>GET NEW PET</button>
         <button onClick= {handleQuit}>QUIT</button>  
         </div>   

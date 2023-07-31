@@ -5,19 +5,7 @@ import Tamagotchi from '../../Components/Tamagotchi/Tamagotchi'
 import GameOver from '../../Components/GameOver/GameOver'
 
 
-
-const handleAnonimusPlayer = (player) => {
-
-    return fetch("http://localhost:8080/api/anonimus", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({player}),
-    }).then((res) => res.json());
-};
-
-const updatePlayer = (updatedPlayer) => {
+const updatePlayer = async (updatedPlayer) => {
   
     return fetch(`http://localhost:8080/api/player/${updatedPlayer.name}`, {
       method: "PATCH",
@@ -29,14 +17,7 @@ const updatePlayer = (updatedPlayer) => {
 }
 
 const getPlayer =  async (player) => {
-  console.log(player);
-
-    if (player.name === 'anonimus') {
-
-      return handleAnonimusPlayer(player);
-    } else {
-        return fetch(`http://localhost:8080/api/player/${player.name}`).then((res) => res.json());
-      }
+  return fetch(`http://localhost:8080/api/player/${player.name}`).then((res) => res.json());
 }
 
   const calculateLifeCycle = (player) => {
@@ -64,6 +45,8 @@ const getPlayer =  async (player) => {
 
     const currentTime =  Date.now();
     const roundsOfUpdates = Math.floor((currentTime - new Date(player.tamagotchi.updated))/120000);
+    console.log("rounds of updates " + roundsOfUpdates);
+    console.log("points to be deducted " + roundsOfUpdates*10);
 
     return roundsOfUpdates * 10;;
   }
@@ -101,6 +84,7 @@ const GamePage = () => {
     useEffect(() => {     
           getPlayer({ name: `${playerName}` })
           .then((data) => {
+
             const evaluatedPlayer = updatePLayerAbsence(data);
             const lifeCycle = calculateLifeCycle(evaluatedPlayer);
 
@@ -108,20 +92,26 @@ const GamePage = () => {
                 evaluatedPlayer.tamagotchi.happiness === 0 ||
                 evaluatedPlayer.tamagotchi.cleanliness === 0 ||
                 lifeCycle === 'dead' || lifeCycle === 'unknown') {
+
                 setPlayer(evaluatedPlayer);
                 setDeath(true);
+
               } else { 
+
                    setPlayer(evaluatedPlayer);
                    setLifeCycle(calculateLifeCycle(evaluatedPlayer));
               }          
           })
   
-      }, []);
+    }, []);
 
 
   useEffect(() => {
 
     if (player) {
+
+      updatePlayer(player);
+
       const intervalId = setInterval(() => {
 
         if (
@@ -140,12 +130,12 @@ const GamePage = () => {
              }
 
           setPlayer(updatedPlayer);
-          updatePlayer(updatedPlayer);
 
         } else {
           setDeath(true);
           clearInterval(intervalId); 
         }
+
       }, 120000);
       return () => clearInterval(intervalId);
     }
@@ -154,7 +144,7 @@ const GamePage = () => {
   return (
     <>
     {player && !dead && <Tamagotchi player={player} setPlayer={setPlayer} lifeCycle={lifeCycle}/>}
-    {dead && <GameOver player={player} setPlayer={setPlayer}/>}
+    {dead && <GameOver player={player} setPlayer={setPlayer} />}
     </>
   )
 }

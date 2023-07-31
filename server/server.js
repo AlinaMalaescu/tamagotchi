@@ -35,33 +35,9 @@ app.get("/api/player/:name", async (req, res) => {
     }
 });
 
-app.post("/api/anonimus", async (req, res, next) => {
-  try {
-    const existingAnonimusUser = await PlayerModel.findOne({ name: "anonimus" });
-
-    if (existingAnonimusUser) {
-      return res.json(existingAnonimusUser);
-    } else {
-      const anonimusPlayer = {
-        name: "anonimus",
-        password: "",
-        tamagotchi: {
-          health: 100,
-          happiness: 100,
-          cleanliness: 100,
-          created: Date.now(),
-          updated: Date.now()
-        },
-      };
-      const newAnonimusUser = await PlayerModel.create(anonimusPlayer);
-      return res.json(newAnonimusUser);
-    }
-  } catch (err) {
-    return next(err);
-  }
-});
-
 app.post('/api/player/create', async (req, res, next) => {
+  console.log('nume player ' + req.body.name);
+  console.log('parola player ' + req.body.password);
 
   try {
       const newPlayer = {
@@ -76,6 +52,7 @@ app.post('/api/player/create', async (req, res, next) => {
         },
       };
       const newlyCreatedPlayer = await PlayerModel.create(newPlayer);
+      console.log(newlyCreatedPlayer);
       return res.json(newlyCreatedPlayer);
  
     } catch (err) {

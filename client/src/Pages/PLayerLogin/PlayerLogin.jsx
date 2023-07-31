@@ -6,11 +6,11 @@ import styles from './PlayerLogin.module.css';
 
 
 
-const searchPlayerByName = (player) => {
+const searchPlayerByName = async (player) => {
   return fetch(`http://localhost:8080/api/player/${player.name}`).then((res) => res.json());
 }
 
-const createPlayer = (player) => {
+const createPlayer = async (player) => {
 
       return fetch("http://localhost:8080/api/player/create", {
         method: "POST",
